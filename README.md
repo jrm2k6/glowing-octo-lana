@@ -1,4 +1,4 @@
 glowing-octo-lana
 =================
 
-Small algorithms and scripts for fun, in Scala.
+Small algorithms and scripts for fun, in whatever.
