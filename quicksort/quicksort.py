@@ -24,7 +24,7 @@ class QuickSort(object):
             pivot_index = self.pick_pivot(len(l) - 1)
             pivot = l[pivot_index]
 
-            self.write_state("pivot : " + str(pivot))
+            self.write_state("pivot,{0}".format(str(pivot)))
             upper = []
             lower = []
 
@@ -37,12 +37,12 @@ class QuickSort(object):
                     upper.append(elem)
 
             if len(lower) != 0:
-                self.write_state("lower " + str(lower))
+                self.write_state("lower,{0}".format(str(lower)))
 
             if len(upper) != 0:
-                self.write_state("upper " + str(upper))
+                self.write_state("upper,{0}".format(str(upper)))
 
-            self.write_state("iteration " + (str(lower)) + " [" +  str(pivot) + "] " + str(upper))
+            self.write_state("iteration,{0}".format(str(lower) + " [" +  str(pivot) + "] " + str(upper)))
             return self.quick_sort(lower) + [pivot] + self.quick_sort(upper)
 
     def write_state(self, state):
