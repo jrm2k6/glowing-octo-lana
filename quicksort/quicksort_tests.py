@@ -7,7 +7,7 @@ from quicksort import QuickSort
 class TestQuicksort(unittest.TestCase):
 
     def setUp(self):
-        self.q = QuickSort("test")
+        self.q = QuickSort(None)
 
     def test_quick_sort_ordered_on_regular_list(self):
         l = [9, 6, 7, 3, 0, 1, 5, 2, 8, 4]

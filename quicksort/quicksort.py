@@ -5,17 +5,11 @@ import random
 
 class QuickSort(object):
 
-    def __init__(self, _filename):
-        self.filename = _filename
-        self.f = None
+    def __init__(self, _file):
+        self.f = _file
 
-        self.open_file_for_output()
-
-    def open_file_for_output(self):
-        self.f = open(self.filename, 'a')
-
-    def pick_pivot(self, max):
-        return random.randint(0, max)
+    def pick_pivot(self, max_value):
+        return random.randint(0, max_value)
 
     def quick_sort(self, l):
         if len(l) < 1:
@@ -46,9 +40,13 @@ class QuickSort(object):
             return self.quick_sort(lower) + [pivot] + self.quick_sort(upper)
 
     def write_state(self, state):
-        self.f.write(state + "\n")
+        if not self.f is None:
+            self.f.write(state + "\n")
 
 
 if __name__ == '__main__':
-    q = QuickSort("test_output")
-    print q.quick_sort([2,4,6,3,8,3,1,9,5])
+    f = open("test_output.txt", 'a')
+    l = [2, 4, 6, 3, 8, 3, 1, 9, 5]
+    f.write("initial_list,{} \n".format(str(l)))
+    q = QuickSort(f)
+    print q.quick_sort(l)
