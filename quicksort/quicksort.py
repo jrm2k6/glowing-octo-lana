@@ -23,7 +23,7 @@ class QuickSort(object):
         else:
             pivot_index = self.pick_pivot(len(l) - 1)
             pivot = l[pivot_index]
-            
+
             self.write_state("pivot : " + str(pivot))
             upper = []
             lower = []
