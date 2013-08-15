@@ -1,9 +1,7 @@
 var cells = [];
-var mergedCells = [];
 var leafs = [];
 var currentIteration;
 var lastPivot;
-var lastPivotMerged;
 var SIZE_CELL = 30;
 var SPACING_BETWEEN_CELL = 90;
 var stackPivot = new StackPivots();
@@ -388,7 +386,6 @@ function Cell(text, id, x, y, index, iteration) {
     this.y = y;
     this.index = index;
     this.iteration = iteration;
-    this.attached = false;
     this.lower = false;
     this.pivot = undefined;
 }
@@ -428,13 +425,7 @@ Cell.prototype.updatePosition = function(x, y) {
 }
 
 Cell.prototype.attachCell = function(lower) {
-    this.attached = true;
     this.lower = lower;
-}
-
-function MergeCells(_cells)
-{
-    this.mergeCells = _cells;
 }
 
 function StackPivots()
