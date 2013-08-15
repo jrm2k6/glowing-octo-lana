@@ -1,6 +1,5 @@
 var cells = [];
 var mergedCells = [];
-var mergedPivot;
 var leafs = [];
 var currentIteration;
 var lastPivot;
@@ -17,37 +16,6 @@ var findCellFromIndexAndIteration = function(index, iteration) {
         }
     }
     return undefined;
-}
-
-var findCellsWithSameValue = function(value) {
-    sameValues = [];
-    for (var i=0; i< cells.length; i++) {
-        if (cells[i].getText() === value) {
-            sameValues.push(cells[i]);
-        }
-    }
-    return sameValues;
-}
-
-var pivotAlreadyMerged = function() {
-
-    attachedCells = stackPivot.head().getAttachedCells();
-
-    if (mergedCells !== undefined) {
-        mergedCellsContent = mergedCells.getCells();
-
-        for (var i = 0; i < mergedCellsContent.length; i++){
-            var currentElem = mergedCellsContent[i];
-            if (isPivot(currentElem)) {
-                currentElem = currentElem.getCell();
-            }
-
-            if (containsObject(currentElem, attachedCells)) {
-                return true;
-            }
-        }
-    }
-    return false;
 }
 
 var isPivot = function(cell) {
@@ -192,17 +160,6 @@ var animateSublists = function(elements) {
     showLineSubList(nbElements);
 }
 
-var getCellsAttachedToPivot = function(cellPivot) {
-    cellsAttached = [];
-    for (var i=0; i<cells.length; i++) {
-        if (cells[i].getPivot() && cells[i].getPivot() === cellPivot) {
-            cellsAttached.push(cells[i]);
-        }
-    }
-    return cellsAttached;
-}
-
-
 var moveLeafsNextToPivot = function() {
     var ordereredC;
     for (var i=0; i<leafs.length; i++) {
@@ -253,40 +210,6 @@ var animateMergeCells = function(pivotToMove) {
 
     pivot.orderCells(orderedC);
 }
-
-var removeMergedCell = function(c) {
-    var index = getMergedCellIndex(c);
-    mergedCells = mergedCells.splice(index, 1);
-}
-
-var pivotInMergedCell = function(c) {
-    for (var i=0; i<mergedCells.length;i++) {
-        if (mergedCells[i].containsCell(c)) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-var getMergedCell = function(c) {
-    for (var i=0; i<mergedCells.length;i++) {
-        if (mergedCells[i].containsCell(c)) {
-            return mergedCells[i];
-        }
-    }
-    return undefined;
-}
-
-var getMergedCellIndex = function(c) {
-    for (var i=0; i<mergedCells.length;i++) {
-        if (mergedCells[i].containsCell(c)) {
-            return i;
-        }
-    }
-    return -1;
-}
-
 
 var showSignSubList = function(nbElements) {
     var isLower = isLowerList(cells[cells.length - nbElements]);
@@ -341,111 +264,6 @@ var showLineSubList = function(nbElements) {
             .attr("stroke-width", 1)
             .attr("stroke", "black");
 }
-
-var moveMergedCellsNextToPivot = function(pivot) {
-    var x = pivot.getX();
-    var y = pivot.getY();
-    var currentCell;
-    currentMergedCells = mergedCells.getCells();
-
-    if (lastPivotMerged.getCell().isAttachedOnLeftPivot()) {
-        for (var i=0; i < currentMergedCells.length; i++) {
-            currentCell = currentMergedCells[i];
-            initialX = x - ((currentMergedCells.length - (i + 1)) * 30) - 30;
-            if (isPivot(currentMergedCells[i])) currentCell = currentMergedCells[i].getCell();
-            animateCell(currentCell, initialX, y);
-            mergedCells.appendMergeCell([pivot]);
-
-        }
-    }else {
-        for (var i=0; i < currentMergedCells.length; i++) {
-            currentCell = currentMergedCells[i];
-            initialX = x + ((i + 1) * 30);
-            if (isPivot(currentMergedCells[i])) currentCell = currentMergedCells[i].getCell();
-            console.log(currentCell, initialX, y);
-            animateCell(currentCell, initialX, y);
-            mergedCells.prependMergeCell([pivot]);
-        }
-    }
-
-    if (!checkAllAttachedCellsAreMerged(pivot)) {
-        moveLeavesNextToPivot(pivot);
-    }
-
-    updateStackPivot();
-}
-
-var updateStackPivot = function() {
-    lastPivotMerged = stackPivot.pop();
-}
-
-var checkAllAttachedCellsAreMerged = function(pivot) {
-    var i;
-    var attachedCells = pivot.getAttachedCells();
-    for (i=0; i<attachedCells.length; i++) {
-        if (!containsCell(attachedCells[i], mergedCells) && !hasHigherIndexStored(attachedCells[i])) {
-            return false;
-        }
-    }
-    return true;
-}
-
-var hasHigherIndexStored = function(cell) {
-    var i;
-    var _mergedCells = mergedCells.getCells();
-    for (i=0; i< _mergedCells.length; i++) {
-        if (_mergedCells[i].getText() == cell.getText() && _mergedCells[i].getIndex() >= cell.getIndex()) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-var moveLeavesNextToPivot = function (pivot) {
-    var x = pivot.getX();
-    var y = pivot.getY();
-    var initialX;
-    var i;
-
-    var leftCellsToMove = pivot.getLeftCells();
-    var rightCellsToMove = pivot.getRightCells();
-
-    if (mergedCells !== undefined) {
-        if (leftCellsToMove.length > 0) {
-            if (hasHigherIndexStored(leftCellsToMove[0])) {
-                leftCellsToMove = mergedCells.getCells();
-            }
-        }
-
-        if (rightCellsToMove.length > 0) {
-            if (hasHigherIndexStored(rightCellsToMove[0])) {
-                rightCellsToMove = mergedCells.getCells();
-            }
-        }
-    }
-
-    for (i=0; i < leftCellsToMove.length; i++) {
-        initialX = x - ((leftCellsToMove.length - (i + 1)) * 30) - 30;
-        animateCell(leftCellsToMove[i], initialX, y);
-    }
-
-    for (i=0; i < rightCellsToMove.length; i++) {
-        if (mergedCells !== undefined) {
-            initialX = x + (i * 30);
-        } else {
-            initialX = x + ((rightCellsToMove.length - i) * 30);
-        }
-        animateCell(rightCellsToMove[i], initialX, y);
-    }
-
-    if (mergedCells === undefined) {
-        mergedCells = new MergeCells(leftCellsToMove.concat([pivot].concat(rightCellsToMove)));
-    }
-
-    updateStackPivot();
-}
-
 
 $(document).ready(function() {
     var l = [1,3,7,5,6];
@@ -519,34 +337,6 @@ function Pivot(cell) {
     this.cell = cell;
     this.attachedCells = [];
     this.orderedCells = [cell];
-}
-
-Pivot.prototype.getAttachedCells = function() {
-    return this.attachedCells;
-}
-
-Pivot.prototype.getLeftCells = function() {
-    leftCells = [];
-
-    for (var i=0; i < this.attachedCells.length; i++) {
-        if (this.attachedCells[i].isAttachedOnLeftPivot()) {
-            leftCells.push(this.attachedCells[i]);
-        }
-    }
-
-    return leftCells;
-}
-
-Pivot.prototype.getRightCells = function() {
-    rightCells = [];
-
-    for (var i=0; i < this.attachedCells.length; i++) {
-        if (this.attachedCells[i].isAttachedOnRightPivot()) {
-            rightCells.push(this.attachedCells[i]);
-        }
-    }
-
-    return rightCells;
 }
 
 Pivot.prototype.attachNewCell = function(cell) {
@@ -642,55 +432,10 @@ Cell.prototype.attachCell = function(lower) {
     this.lower = lower;
 }
 
-Cell.prototype.isAttachedOnLeftPivot = function() {
-    return this.attached !== undefined && this.lower;
-}
-
-Cell.prototype.isAttachedOnRightPivot = function() {
-    return this.attached !== undefined && !this.lower;
-}
-
-
 function MergeCells(_cells)
 {
     this.mergeCells = _cells;
 }
-
-MergeCells.prototype.prependMergeCell = function(_cells) {
-    this.mergeCells = _cells.concat(this.mergeCells);
-    this.removeDuplicates();
-}
-
-MergeCells.prototype.appendMergeCell = function(_cells) {
-    this.mergeCells = this.mergeCells.concat(_cells);
-    this.removeDuplicates();
-}
-
-MergeCells.prototype.getCells = function() {
-    return this.mergeCells;
-}
-
-MergeCells.prototype.removeDuplicates = function() {
-    _mergeCells = []
-    for (var i=0; i<this.mergeCells.length; i++) {
-        if (!containsObject(this.mergeCells[i], _mergeCells)) {
-            _mergeCells.push(this.mergeCells[i]);
-        }
-    }
-
-    this.mergeCells = _mergeCells;
-}
-
-MergeCells.prototype.containsCell = function(c) {
-    for (var i=0; i<this.mergeCells.length; i++) {
-        if (this.mergeCells[i].getText() === c.getText() && this.mergeCells[i].getIndex() == c.getIndex()) {
-            return true;
-        }
-    }
-    return false;
-}
-
-
 
 function StackPivots()
 {
@@ -725,27 +470,4 @@ StackPivots.prototype.searchCell = function(c) {
 
 StackPivots.prototype.getStack = function() {
     return this.elements;
-}
-
-
-
-
-
-
-
-function CellList() {
-    this.cells = [];
-}
-
-CellList.prototype.appendCell = function(cell) {
-    this.cells.push(cell);
-}
-
-CellList.prototype.indexOf = function(elem) {
-    for (var i=0; i < this.cells.length; i++) {
-        if (this.cells[i].getText() == elem.getText() && this.cells[i].getIndex() == elem.getIndex()) {
-            return i;
-        }
-    }
-    return -1;
 }
