@@ -169,8 +169,20 @@ var moveLeafsNextToPivot = function() {
             animateCell(leafs[i], leafs[i].getPivot().getX() + SIZE_CELL, leafs[i].getPivot().getY());
             ordereredC.push(leafs[i]);
         }
-        leafs[i].getPivot().orderCells(ordereredC)
+
+        removeLinesAndSigns(leafs[i].getPivot().getText());
+        leafs[i].getPivot().orderCells(ordereredC);
     }
+}
+
+var removeLinesAndSigns = function(value) {
+    elements = document.getElementsByClassName("line_"+value);
+    signs = document.getElementsByClassName("sign_"+value)
+    while(elements.length > 0) {
+        elements[0].parentNode.removeChild(elements[0]);
+        signs[0].parentNode.removeChild(signs[0]);
+    }
+
 }
 
 var mergeCells = function() {
@@ -180,8 +192,45 @@ var mergeCells = function() {
         var cell = pivots[i].getCell();
         if (cell.getPivot() !== undefined) {
             animateMergeCells(pivots[i]);
+            removeLinesAndSigns(pivots[i].getCell().getText());
+            removeTemporaryCells(pivots[i]);
+        } else {
+            cleanFirstPivot(pivots[i]);
         }
     }
+}
+
+var cleanFirstPivot = function(firstPivot) {
+
+    removeLinesAndSigns(firstPivot.getCell().getText());
+    removeTemporaryCells(firstPivot);
+}
+
+var removeTemporaryCells = function(pivot) {
+    var temporaryCells = pivot.getTemporaryCells();
+    for (var i=0; i<temporaryCells.length; i++) {
+        var cell = temporaryCells[i];
+        var suffix = cell.getClassSuffix();
+        removeCell(suffix);
+    }
+}
+
+var removeCell = function(suffix) {
+    var c = document.getElementsByClassName("cell_"+suffix);
+    var t = document.getElementsByClassName("cell_text_"+suffix);
+
+    c[0].parentNode.removeChild(c[0]);
+    t[0].parentNode.removeChild(t[0]);
+}
+
+var prependCellOrderedToPivot = function(pivotCellsOrdered, currentPivotCellsOrdered) {
+    var temp;
+    if (currentPivotCellsOrdered instanceof Array){
+        temp = currentPivotCellsOrdered.concat(pivotCellsOrdered);
+    } else {
+        temp = pivotCellsOrdered.unshift(currentPivotCellsOrdered)
+    }
+    return temp;
 }
 
 var animateMergeCells = function(pivotToMove) {
@@ -194,7 +243,7 @@ var animateMergeCells = function(pivotToMove) {
 
     if (pivotToMove.getCell().lower) {
         positionX = pivotToMove.getCell().getPivot().getX() - (nbElements * 30);
-        orderedC.unshift(cellsOrdered);
+        orderedC = prependCellOrderedToPivot(orderedC, cellsOrdered);
     } else {
         positionX = pivotToMove.getCell().getPivot().getX() + 30;
         orderedC = orderedC.concat(cellsOrdered)
@@ -234,7 +283,7 @@ var showSignSubList = function(nbElements) {
             .style("alignment-baseline", "central")
             .attr("y", signPositionY)
             .attr("x", signPositionX)
-            .attr("class", "inf_sign");
+            .attr("class", "sign_"+lastPivot.getText());
 }
 
 var findMiddleSubList = function(nbElements) {
@@ -260,7 +309,8 @@ var showLineSubList = function(nbElements) {
             .attr("x2", linePositionEndX)
             .attr("y2", linePositionEndY)
             .attr("stroke-width", 1)
-            .attr("stroke", "black");
+            .attr("stroke", "black")
+            .attr("class", "line_"+lastPivot.getCell().getText());
 }
 
 $(document).ready(function() {
@@ -291,7 +341,7 @@ $(document).ready(function() {
     createCells(l, 5);
     animateSublists(subList);
 
-
+//
 //    var l = [8, 19, 5, 9, 1, 3, 44];
 //    var subList;
 //
@@ -316,7 +366,7 @@ $(document).ready(function() {
 //    createCells(l, 5);
 //    animateSublists(subList);
 //
-//        showPivot(findCellFromIndexAndIteration(15,5));
+//    showPivot(findCellFromIndexAndIteration(15,5));
 //    subList = [8];
 //    l = l.concat(subList);
 //    createCells(l, 7);
@@ -379,6 +429,27 @@ Pivot.prototype.updatePosition = function(x, y) {
     this.cell.updatePosition(x, y);
 }
 
+Pivot.prototype.getTemporaryCells = function() {
+    var result = [];
+    for (var i=0; i<this.attachedCells.length; i++) {
+        if (this.isPresentIn(this.attachedCells[i], this.orderedCells) === -1){
+               result.push(this.attachedCells[i]);
+        }
+    }
+
+    return result;
+}
+
+Pivot.prototype.isPresentIn = function(c, l) {
+    for (var i=0; i< l.length; i++) {
+        if (l[i].getText() == c.getText() && l[i].getIndex() == c.getIndex()
+                && l[i].getX() === c.getX() && l[i].getY() === c.getY()) {
+            return i;
+        }
+    }
+    return -1;
+}
+
 function Cell(text, id, x, y, index, iteration) {
     this.text = text;
     this.id = id;
@@ -426,6 +497,10 @@ Cell.prototype.updatePosition = function(x, y) {
 
 Cell.prototype.attachCell = function(lower) {
     this.lower = lower;
+}
+
+Cell.prototype.getClassSuffix = function() {
+    return this.getIndex()+"_"+this.getText()+"_"+this.getIteration();
 }
 
 function StackPivots()
