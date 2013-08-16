@@ -2,8 +2,10 @@ var cells = [];
 var leafs = [];
 var currentIteration;
 var lastPivot;
-var SIZE_CELL = 30;
-var SPACING_BETWEEN_CELL = 90;
+var SIZE_CELL = 50;
+var SPACING_BETWEEN_CELL = 110;
+var PADDING_LETTER_X = 21;
+var PADDING_LETTER_Y = 25;
 var stackPivot = new StackPivots();
 
 
@@ -14,32 +16,6 @@ var findCellFromIndexAndIteration = function(index, iteration) {
         }
     }
     return undefined;
-}
-
-var isPivot = function(cell) {
-    return cell instanceof Pivot;
-}
-
-function containsObject(obj, list) {
-    for (var i = 0; i < list.length; i++) {
-        if (list[i] === obj) {
-            return true;
-        }
-    }
-    return false;
-}
-
-function containsCell(obj, list) {
-    for (var i = 0; i < list.length; i++) {
-        var c = list[i];
-        if (c instanceof Pivot) {
-            c = c.getCell();
-        }
-        if (c === obj) {
-            return true;
-        }
-    }
-    return false;
 }
 
 var createCells = function(l, it) {
@@ -59,16 +35,16 @@ var createCells = function(l, it) {
             .attr("width", SIZE_CELL)
             .attr("height", SIZE_CELL)
             .style("fill", "white")
-            .style("stroke", "black")
+            .style("stroke", "#3c3c3c")
             .style("stroke-width", "2px")
             .attr("class", function(d){return "cell_" + d.id + "_" + it;})
 
     gs.append("text")
             .text(function(d){return d.text;})
             .style("alignment-baseline", "central")
-            .attr("y", function(d){return d.y + 15;})
-            .attr("x", function(d){return d.x + 2;})
-            .attr("class", function(d){return "cell_text_" + d.id + "_" + it;})
+            .attr("y", function(d){return d.y + PADDING_LETTER_Y;})
+            .attr("x", function(d){return d.x + PADDING_LETTER_X;})
+            .attr("class", function(d){return "cell_text_" + d.id + "_" + it;});
 };
 
 var showPivot = function(c) {
@@ -90,8 +66,8 @@ var animateCell = function(c, x, y) {
             .attr("y", y);
 
 
-    text.transition().attr("x", x)
-            .attr("y", y);
+    text.transition().attr("x", x + PADDING_LETTER_X)
+            .attr("y", y + PADDING_LETTER_Y);
 }
 
 var generateCoordinates = function(ql, it) {
@@ -201,7 +177,6 @@ var mergeCells = function() {
 }
 
 var cleanFirstPivot = function(firstPivot) {
-
     removeLinesAndSigns(firstPivot.getCell().getText());
     removeTemporaryCells(firstPivot);
 }
@@ -242,17 +217,17 @@ var animateMergeCells = function(pivotToMove) {
     var positionY = pivot.getY();
 
     if (pivotToMove.getCell().lower) {
-        positionX = pivotToMove.getCell().getPivot().getX() - (nbElements * 30);
+        positionX = pivotToMove.getCell().getPivot().getX() - (nbElements * SIZE_CELL);
         orderedC = prependCellOrderedToPivot(orderedC, cellsOrdered);
     } else {
-        positionX = pivotToMove.getCell().getPivot().getX() + 30;
+        positionX = pivotToMove.getCell().getPivot().getX() + SIZE_CELL;
         orderedC = orderedC.concat(cellsOrdered)
     }
 
     for (var i=0; i<nbElements; i++) {
         animateCell(cellsOrdered[i], positionX, positionY);
         cellsOrdered[i].updatePosition(positionX, positionY);
-        positionX+=30;
+        positionX+=SIZE_CELL;
     }
 
     pivot.orderCells(orderedC);
