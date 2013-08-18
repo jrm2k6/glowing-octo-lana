@@ -1,21 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" type="text/css" href="./main.css" />
-    <link rel="stylesheet" type="text/css" href="./bootstrap.min.css" />
+    <meta charset="UTF-8">
     <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.icon-large.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/main.css" />
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="animations.js"></script>
     <script type="text/javascript" src="quicksort.js"></script>
     <script type="text/javascript" src="bootstrap.min.js"></script>
     <title> Quicksort animation using d3.js</title>
 </head>
 <body>
-    <div id="main">
-        <div id=header>
-
+    <div id=header>
+        <div id="author">
+            <a id="author_link" href="http://www.jeremydagorn.com" target="_blank">Jérémy Dagorn</a>
+            <i class="icon-large icon-search"></i>
+            <i class="icon-search icon-large"></i>
         </div>
-        <svg id="svg" height="2000">
+    </div>
+    <div id="main">
+
+        <div id="algorithm">
+            <div id="controllers">
+                <button class="btn btn-large">Next step</button>
+            </div>
+            <div class="well steps">
+                This part will show the steps followed by the <algorithm></algorithm>
+            </div>
+        </div>
+
+        <svg id="svg" height="1000">
         </svg>
+    </div>
+    <div id="footer">
+        <div id="social_networks">
+            <i class="icon-large icon-search"></i>
+            <i class="icon-large icon-twitter-t"></i>
+        </div>
+
     </div>
 
 </body>

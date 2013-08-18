@@ -1,0 +1,58 @@
+body {
+    background-color: #f5f5f5;
+}
+
+#svg {
+    background-color: #f5f5f5;
+}
+
+#header {
+    position: relative;
+    padding: 0;
+    margin: 0 auto;
+    width: 100%;
+    background-color: #333;
+    font-family: 'Lato', Helvetica;
+    font-size: 30px;
+    color: #ffffff;
+}
+
+#author, #social_networks {
+    position: relative;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    left: 50%;
+}
+
+#author_link {
+    text-decoration: none;
+    color: #ffffff;
+}
+
+#main {
+    position: relative;
+    left: 20%;
+}
+
+#controllers {
+    float:left;
+    padding-top: 10px;
+}
+
+#footer {
+    position: relative;
+    padding: 0;
+    margin: 0 auto;
+    width: 100%;
+    background-color: #333;
+}
+
+#algorithm {
+    position: relative;
+    padding: 20px;
+}
+
+.steps {
+    margin-left: 20px;
+    float: left;
+}
