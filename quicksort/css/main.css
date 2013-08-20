@@ -12,9 +12,17 @@ body {
     margin: 0 auto;
     width: 100%;
     background-color: #333;
-    font-family: 'Lato', Helvetica;
+    font-family: Helvetica;
     font-size: 30px;
     color: #ffffff;
+}
+
+#title {
+    position:relative;
+    padding: 5px 0px 5px 0px;
+    text-align: center;
+    font-size: 22px;
+    background-color: darkslategrey;
 }
 
 #author, #social_networks {
@@ -31,12 +39,12 @@ body {
 
 #main {
     position: relative;
-    left: 20%;
 }
 
 #controllers {
     float:left;
     padding-top: 10px;
+    padding-left: 20px;
 }
 
 #footer {
@@ -49,10 +57,4 @@ body {
 
 #algorithm {
     position: relative;
-    padding: 20px;
-}
-
-.steps {
-    margin-left: 20px;
-    float: left;
 }

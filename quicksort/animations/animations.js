@@ -2,11 +2,11 @@ var cells = [];
 var leafs = [];
 var currentIteration;
 var lastPivot;
+var stackPivot = new StackPivots();
 var SIZE_CELL = 50;
 var SPACING_BETWEEN_CELL = 110;
 var PADDING_LETTER_X = 21;
 var PADDING_LETTER_Y = 25;
-var stackPivot = new StackPivots();
 
 
 var findCellFromIndexAndIteration = function(index, iteration) {
@@ -152,8 +152,8 @@ var moveLeafsNextToPivot = function() {
 }
 
 var removeLinesAndSigns = function(value) {
-    elements = document.getElementsByClassName("line_"+value);
-    signs = document.getElementsByClassName("sign_"+value)
+    var elements = document.getElementsByClassName("line_"+value);
+    var signs = document.getElementsByClassName("sign_"+value)
     while(elements.length > 0) {
         elements[0].parentNode.removeChild(elements[0]);
         signs[0].parentNode.removeChild(signs[0]);
@@ -162,7 +162,7 @@ var removeLinesAndSigns = function(value) {
 }
 
 var mergeCells = function() {
-    pivots = stackPivot.getStack();
+    var pivots = stackPivot.getStack();
 
     for (var i=pivots.length-1; i >=0; i--){
         var cell = pivots[i].getCell();
@@ -316,45 +316,58 @@ $(document).ready(function() {
 //    createCells(l, 5);
 //    animateSublists(subList);
 
+    var functions = [
+        function() {showPivot(findCellFromIndexAndIteration(3,1));},
+        function() {l = iterate([8,5,1,3], l, 2);},
+        function() {l = iterate([19, 44], l, 3);},
+        function() {showPivot(findCellFromIndexAndIteration(10,2));},
+        function() {l = iterate([1], l, 4);},
+        function() {l = iterate([8,5], l, 5);},
+        function() {showPivot(findCellFromIndexAndIteration(15,5));},
+        function() {l = iterate([8], l, 6);},
+        function() {showPivot(findCellFromIndexAndIteration(12,3));},
+        function() {l = iterate([19], l, 7);},
+        function() {moveLeafsNextToPivot();},
+        function() {mergeCells()}
+    ]
 
-    var l = [8, 19, 5, 9, 1, 3, 44];
-    var subList;
+    initList()
+    var nbClicks = 0;
+    $("#next").on("click", function(){
+        functions[nbClicks]();
+        nbClicks++;
+    });
 
-    createCells(l, 1);
-    showPivot(findCellFromIndexAndIteration(3,1));
-    subList = [8,5,1,3];
-    l = l.concat(subList);
-    createCells(l, 2);
-    animateSublists(subList);
-    subList = [19, 44];
-    l = l.concat(subList);
-    createCells(l, 3);
-    animateSublists(subList);
+    $("#reset").on("click", function(){
+        nbClicks = 0;
+        reset();
+        initList();
 
-    showPivot(findCellFromIndexAndIteration(10,2));
-    subList = [1];
-    l = l.concat(subList);
-    createCells(l, 4);
-    animateSublists(subList);
-    subList = [8,5];
-    l = l.concat(subList);
-    createCells(l, 5);
-    animateSublists(subList);
-
-    showPivot(findCellFromIndexAndIteration(15,5));
-    subList = [8];
-    l = l.concat(subList);
-    createCells(l, 7);
-    animateSublists(subList);
-
-    showPivot(findCellFromIndexAndIteration(12,3));
-    subList = [19];
-    l = l.concat(subList);
-    createCells(l, 6);
-    animateSublists(subList);
-
+    });
 
 });
+
+var reset = function() {
+    leafs = [];
+    cells = [];
+    stackPivot = new StackPivots();
+    currentIteration = 0;
+    lastPivot = undefined;
+    $("#svg").empty();
+}
+
+var initList = function() {
+    l = [8, 19, 5, 9, 1, 3, 44];
+    createCells(l, 1);
+}
+
+var iterate = function(sublist, l, it) {
+    console.log(l);
+    l = l.concat(sublist);
+    createCells(l, it);
+    animateSublists(sublist);
+    return l;
+}
 
 function Pivot(cell) {
     this.cell = cell;
@@ -487,26 +500,6 @@ function StackPivots()
 StackPivots.prototype.push = function(elem) {
     this.elements.push(elem);
     this.elementsCell.push(elem.getCell());
-}
-
-StackPivots.prototype.pop = function() {
-    poppedElement = this.elements[this.elements.length - 1];
-    this.elements = this.elements.slice(0, this.elements.length-1);
-    this.elementsCell = this.elementsCell.slice(0, this.elementsCell-1);
-    return poppedElement;
-}
-
-StackPivots.prototype.head = function() {
-    return this.elements[this.elements.length-1];
-}
-
-StackPivots.prototype.isEmpty = function() {
-    return this.elements.length === 0;
-}
-
-StackPivots.prototype.searchCell = function(c) {
-    var index = this.elementsCell.indexOf(c);
-    return this.elementsCell[index];
 }
 
 StackPivots.prototype.getStack = function() {
