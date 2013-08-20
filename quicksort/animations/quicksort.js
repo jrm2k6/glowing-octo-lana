@@ -20,10 +20,8 @@ var Quicksort = (function() {
             list.splice(pivot,1);
             for (var i=0; i<list.length; i++) {
                 if (list[i] < valuePivot) {
-                    console.log("lower::", list[i], valuePivot)
                     lower.push(list[i]);
                 } else {
-                    console.log("upper::", list[i], valuePivot)
                     greater.push(list[i]);
                 }
             }
