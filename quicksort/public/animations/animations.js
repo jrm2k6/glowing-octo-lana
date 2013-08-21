@@ -289,33 +289,6 @@ var showLineSubList = function(nbElements) {
 }
 
 $(document).ready(function() {
-//    var l = [1,3,7,5,6];
-//    var subList;
-//
-//    createCells(l, 1);
-//    showPivot(findCellFromIndexAndIteration(1, 1));
-//
-//    subList = [1];
-//    l = l.concat(subList);
-//    createCells(l, 2);
-//    animateSublists(subList);
-//    subList = [7, 5, 6];
-//    l = l.concat(subList);
-//    createCells(l, 3);
-//    animateSublists(subList);
-//
-//    showPivot(findCellFromIndexAndIteration(7, 3));
-//    subList = [7, 6];
-//    l = l.concat([7,6]);
-//    createCells(l, 4);
-//    animateSublists(subList);
-//
-//    showPivot(findCellFromIndexAndIteration(10, 4));
-//    subList = [7];
-//    l = l.concat([7]);
-//    createCells(l, 5);
-//    animateSublists(subList);
-
     var functions = [
         function() {showPivot(findCellFromIndexAndIteration(3,1));},
         function() {l = iterate([8,5,1,3], l, 2);},
@@ -331,21 +304,29 @@ $(document).ready(function() {
         function() {mergeCells()}
     ]
 
-    initList()
+    initList();
     var nbClicks = 0;
     $("#next").on("click", function(){
-        functions[nbClicks]();
+        if (nbClicks < functions.length){
+            functions[nbClicks]();
+        }
         nbClicks++;
+        showProgress(nbClicks);
     });
 
     $("#reset").on("click", function(){
         nbClicks = 0;
         reset();
         initList();
+        showProgress(0);
 
     });
 
 });
+
+var showProgress = function(nbClicks) {
+    $(".bar").css("width", (8.4 * nbClicks)+ "%");
+}
 
 var reset = function() {
     leafs = [];
@@ -362,7 +343,6 @@ var initList = function() {
 }
 
 var iterate = function(sublist, l, it) {
-    console.log(l);
     l = l.concat(sublist);
     createCells(l, it);
     animateSublists(sublist);

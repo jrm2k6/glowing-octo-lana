@@ -55,6 +55,14 @@ body {
     background-color: #333;
 }
 
+.progress {
+    margin-left: 20px;
+    margin-top: 20px;
+    position: relative;
+    float:left;
+    width: 50%;
+}
+
 #algorithm {
     position: relative;
 }
