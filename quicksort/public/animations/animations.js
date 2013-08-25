@@ -318,9 +318,6 @@ Animations = function() {
     };
 }();
 
-
-
-
 $(document).ready(function() {
     var functions = [
         function() {Animations.showPivot(Animations.findCellFromIndexAndIteration(3,1));},
@@ -345,7 +342,7 @@ $(document).ready(function() {
             Explanation.showExplanationsSubListsInf(3, [1]),
             Explanation.showExplanationsSubListsSup(3, [8,5]),
             Explanation.showPivotExplanation(5),
-            Explanation.showExplanationsSubListsSup(3, [8]),
+            Explanation.showExplanationsSubListsSup(5, [8]),
             Explanation.showPivotExplanation(44),
             Explanation.showExplanationsSubListsInf(44, [19]),
             Explanation.showExplanationsMerge(),
@@ -359,7 +356,8 @@ $(document).ready(function() {
             functions[nbClicks]();
             var textArea = $(".explanations");
             var existingText = textArea.val();
-            $(".explanations").val(existingText + explanations[nbClicks]());
+            console.log(existingText);
+            $(".explanations").val(existingText + explanations[nbClicks]);
         }
         nbClicks++;
         Animations.showProgress(nbClicks);

@@ -1,14 +1,14 @@
-Explanation = function(){
+var Explanation = function(){
     function showExplanationPivot(pivotNumber) {
         return "Pivot is : " + pivotNumber + ".\n";
     }
 
     function showExplanationsSubListsInf(pivotNumber, subListInf) {
-        return "Generation of " + subListInf.toString() + "which contains only lower values than " + pivotNumber + ".\n";
+        return "Generation of [" + subListInf.toString() + "] which contains only lower values than " + pivotNumber + ".\n";
     }
 
     function showExplanationsSubListsSup(pivotNumber, subListSup) {
-        return "Generation of " + subListSup.toString() + "which contains only bigger values than " + pivotNumber +".\n";
+        return "Generation of [" + subListSup.toString() + "] which contains only bigger values than " + pivotNumber +".\n";
     }
 
     function showExplanationsMerge() {

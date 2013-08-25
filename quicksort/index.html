@@ -7,9 +7,11 @@
     <link rel="stylesheet" type="text/css" href="public/css/bootstrap.icon-large.min.css" />
     <link rel="stylesheet" type="text/css" href="public/css/main.css" />
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="public/animations/explanations.js"></script>
     <script type="text/javascript" src="public/animations/quicksortElements.js"></script>
     <script type="text/javascript" src="public/animations/animations.js"></script>
     <script type="text/javascript" src="public/animations/quicksort.js"></script>
+    <script type="text/javascript" src="public/animations/uiHandlers.js.js"></script>
     <script type="text/javascript" src="public/animations/bootstrap.min.js"></script>
     <title> Quicksort animation using d3.js</title>
 </head>
@@ -22,7 +24,6 @@
             How quicksort works?
         </div>
     </div>
-    <textarea rows="3" class="explanations"></textarea>
     <div id="main">
         <div id="algorithm">
             <div id="controllers">
@@ -32,6 +33,7 @@
             <div class="progress">
                 <div class="bar" style="width: 0%;"></div>
             </div>
+            <textarea rows="13" class="explanations input-xxlarge" placeholder="Algorithms steps"></textarea>
         </div>
         <svg id="svg" height="1000">
         </svg>
